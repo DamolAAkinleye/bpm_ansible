@@ -85,11 +85,6 @@
     src: kibana.conf
     dest: /etc/nginx/conf.d/kibana.conf
 
-- name: Enable and start nginx service
-  service:
-    name: nginx
-    state: started
-    enabled: yes
 
 - name: Copy Oracle JDBC drive to logstash lib
   copy:
@@ -129,8 +124,14 @@
     src: filebeat.yml.j2
     dest: /etc/filebeat/filebeat.yml
 
-- name: Enable and start filebeat service
+- name: Enable but don't start filebeat service
   service: 
     name: filebeat
     enabled: yes
-    state: started 
+    state: stopped 
+
+- name: Enable but don't start nginx service
+  service:
+    name: nginx
+    state: stopped
+    enabled: yes
