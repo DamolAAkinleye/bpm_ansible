@@ -1,0 +1,11 @@
+[Unit]
+Description=Tibco EMS server
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart={{ ems_startup_script }}
+
+[Install]
+WantedBy=multi-user.target

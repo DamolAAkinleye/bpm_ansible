@@ -1,0 +1,13 @@
+---
+source_folder: '/vagrant/bpm/4.1'
+
+installation_folder: '/vagrant/bpm_studio_installation'
+
+installer_archives:
+  - 'TIB_business-studio-bpm-edition_4.1.0_linux24gl23_x86_64-3-4-2.zip'
+
+tibco_home: '/home/vagrant/tibco'
+tibco_env_name: 'TIBCO-HOME'
+tibco_config_home: '/home/vagrant/TIBCO_HOME'
+
+env_name: 'amx-bpm'

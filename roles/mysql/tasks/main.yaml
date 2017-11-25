@@ -1,0 +1,10 @@
+---
+- name: Install the mysql rpm from a remote repo
+  yum:
+    name: https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+    state: present
+
+- name: Install mysql
+  yum:
+    name: mysql-server
+    state: present

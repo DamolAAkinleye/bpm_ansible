@@ -1,0 +1,22 @@
+---
+- name: Set up BPM development environment
+  hosts: all
+  gather_facts: No
+
+  roles:
+    - { role: vim, when: false }
+    - { role: docker, when: false }
+    - { role: java, become: yes, when: false }
+    - { role: ant, become: yes, when: false }
+    - { role: oracle, become: yes, when: false }
+    - { role: python, become: yes, when: false }
+    - { role: mysql, become: yes, when: false }
+    - { role: elastic_stack, become: yes, when: false }
+    - { role: angular, when: false }
+    - { role: ems, when: false }
+    - { role: bpm, when: false }
+    - { role: bpm_studio, when: false }
+    - { role: bpm_hf, when: false }
+    - { role: bpm_rsbt, when: false }
+    - { role: bpm_config, when: true }
+    

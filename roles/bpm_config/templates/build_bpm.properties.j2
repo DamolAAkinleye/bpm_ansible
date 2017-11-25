@@ -1,0 +1,310 @@
+# We only take '/' as path separator
+# The following properties may be modified
+tibco.home={{ tibco_home }}
+tibco.config.mgmt.home={{ tibco_config_home }}/amx-bpm/tibco/data
+amx.version={{ amx_version }}
+
+# Administrator Server Configuration: Details
+admin.enterprise.name=AMX-BPM
+admin.instance.name=AMX-BPM-Server
+admin.shared.folder=${tibco.config.mgmt.home}/admin/${admin.enterprise.name}/shared
+
+# Administrator Server Configuration: TIBCO Host Configuration
+admin.tibcohost.registerservice=false
+admin.tibcohost.createshortcut=false
+th.jmx.host=localhost.localdomain
+th.jmx.port=6051
+admin.tibcohost.systemenvironment=SystemEnvironment
+admin.tibcohost.systemhost=SystemHost
+admin.tibcohost.systemnode=SystemNode
+logging.config.properties.file=${tct.templates.dir}/log-config-override.properties
+
+dev.envt.name=BPMEnvironment
+dev.host.name=SystemHost
+dev.node.name=BPMNode
+dev.node.port=6031
+
+# Administrator Server Configuration: Connection Settings
+serverconnsetting.host=0.0.0.0
+serverconnsetting.port=8120
+serverconnsetting.adminurl=http://localhost.localdomain:8120
+serverconnsetting.managementport=6021
+serverconnsetting.timeout=30
+
+serverconnsetting.usebaseurl=false
+serverconnsetting.baseurl=http://localhost.localdomain:19767
+
+serverconnsetting.enablessl=false
+# Connector Keystore properties
+
+serverconnsetting.keystorelocation=${tibco.home}/administrator/${amx.version}/samples/admin.default.ssl.jceks
+serverconnsetting.keystoretype=jceks
+serverconnsetting.keystorepassword=#!/HPUsQmSFTrrT0jx3pmrh60D68/g6Zjm
+serverconnsetting.keyalias=mykey
+serverconnsetting.keypassword=#!/HPUsQmSFTrrT0jx3pmrh60D68/g6Zjm
+
+# Admin trust store setting for SSL
+serverconnsetting.truststorelocation=${tibco.config.mgmt.home}/admin/${admin.enterprise.name}/samples/adminCliTruststore.jks
+serverconnsetting.truststoretype=jks
+serverconnsetting.truststorepassword=#!feiKaElawZazJ+xNFJeyd/67OD8P6feU
+
+# Admin CLI keystore 
+admin.cli.ssl.keystorelocation=${tibco.config.mgmt.home}/admin/${admin.enterprise.name}/samples/adminCliKeystore.jceks
+admin.cli.ssl.keystorepassword=#!QGbUbKcQnLPnx/WcakGSvOHU+gLq4RRZFAiQua+7XeJ2dITqCS/lAg==
+admin.cli.ssl.keystoretype=jceks
+admin.cli.ssl.keyalias=AMXAdminCli
+admin.cli.ssl.keypassword=#!zFqWerM/lrbU9GFG82dRdpheeJ43eGXydcBisFkk3jc1gR/CoPrFOQ==
+
+# Administrator Server Configuration: Internal HTTP Settings
+admin.internalhttpconn.host=0.0.0.0
+admin.internalhttpconn.port=19767
+admin.internalhttpconn.headerBufferSize=4096
+admin.internalhttpconn.requestBufferSize=8192
+admin.internalhttpconn.responseBufferSize=24576
+admin.internalhttpconn.maxIdleTime=200000
+admin.internalhttpconn.lowResourceMaxIdleTime=-1
+admin.internalhttpconn.isSecuredWithTCS=false
+
+# Administrator Server Configuration: Notification and Messaging Bus Server
+admin.ems.url=tcp://localhost.localdomain:7222
+admin.ems.username={{ ems_bpm_user }}
+admin.ems.password=#!/fIv13yVNeOBkB8+L5FJyLO5JlUA0QHm
+admin.ems.enablessl=false
+admin.ems.keystorepassword=#!mC+jQOWf88fia7ucCVUCaA==
+admin.ems.keystoretype=JKS
+admin.ems.keystorelocation=
+
+# Administrator Server Configuration: Notification and Messaging Bus Server
+admin.factory.enable=false
+admin.factory.name=GenericConnectionFactory
+
+# Administrator Server Configuration: Database Details
+admin.db.usedefault=true
+admin.db.url=jdbc:hsqldb:file:${tibco.config.mgmt.home}/admin/${admin.enterprise.name}/private/${admin.instance.name}/hsqldb/amx
+
+admin.db.driver=org.hsqldb.jdbcDriver
+admin.db.dialect=org.hibernate.dialect.HSQLDialect
+admin.db.username=sa
+admin.db.password=#!t0Fkc4qsDN4UaA18oNF2LA==
+admin.db.maxconnections=10
+admin.db.enablessl=false
+admin.db.keystorepassword=#!NuwZ9ESivMIlirldYKDwNA==
+admin.db.keystoretype=JKS
+admin.db.keystorelocation=
+
+# Administrator Server Configuration: Authentication Realm
+admin.authenticationrealm.type=dbrealm
+admin.authenticationrealm.username=root
+admin.authenticationrealm.password=#!u2BmBE1svuBV2pbPUB8K8Q==
+
+# Administrator Server Configuration: Database Authentication Realm Details
+admin.dbrealm.usedefault=true
+admin.dbrealm.url=${admin.db.url}
+admin.dbrealm.driver=${admin.db.driver}
+admin.dbrealm.dialect=${admin.db.dialect}
+admin.dbrealm.username=${admin.db.username}
+admin.dbrealm.password=${admin.db.password}
+admin.dbrealm.maxconnections=${admin.db.maxconnections}
+admin.dbrealm.enablessl=${admin.db.enablessl}
+admin.dbrealm.keystorepassword=${admin.db.keystorepassword}
+admin.dbrealm.keystoretype=${admin.db.keystoretype}
+admin.dbrealm.keystorelocation=${admin.db.keystorelocation}
+
+# Administrator Server Configuration: Credential Server Details
+admin.cs.host=0.0.0.0
+admin.cs.port=6041
+admin.cs.username=user1
+admin.cs.password=#!M/vlIGtlYBKXc4jGipSRa7lGsD0ziQOJTem0TSjG2O8=
+
+# Administrator Server Configuration: Credential Server Keystore
+admin.cs.keystore.autogenerate=true
+admin.cs.keystore.commonname=amxadmin
+admin.cs.keystorelocation=/home/vagrant/tibco/tibcohost/3.3/templates/admin.default.ssl.trust.store.ts
+admin.cs.keystoretype=JCEKS
+admin.cs.keystorepassword=#!0NNkoceBsVTVlXbZiaR5lw==
+admin.cs.keyalias=
+admin.cs.keypassword=#!9u+eue1Bmyb1KV1a07AjJw==
+
+# Administrator Server Configuration: Monitoring Notification Server
+mcr.ems.usedefault=true
+mcr.ems.url=${admin.ems.url}
+mcr.ems.username=${admin.ems.username}
+mcr.ems.password=${admin.ems.password}
+mcr.ems.enablessl=${admin.ems.enablessl}
+mcr.ems.keystorepassword=${admin.ems.keystorepassword}
+mcr.ems.keystoretype=${admin.ems.keystoretype}
+mcr.ems.keystorelocation=${admin.ems.keystorelocation}
+
+# Administrator Server Configuration: Monitoring Database Configuration
+mcr.db.url=${admin.db.url}
+mcr.db.driver=${admin.db.driver}
+mcr.db.dialect=${admin.db.dialect}
+mcr.db.username=${admin.db.username}
+mcr.db.password=${admin.db.password}
+mcr.db.maxconnections=${admin.db.maxconnections}
+mcr.db.enablessl=${admin.db.enablessl}
+mcr.db.keystorepassword=${admin.db.keystorepassword}
+mcr.db.keystoretype=${admin.db.keystoretype}
+mcr.db.keystorelocation=${admin.db.keystorelocation}
+
+# Administrator Server Configuration: Monitoring General Configuration
+mcr.general.config.extended.monitoring.enabled=false
+
+# Administrator Server Configuration: Log Service Database Configuration
+logging.db.url=${admin.db.url}
+logging.db.driver=${admin.db.driver}
+logging.db.dialect=${admin.db.dialect}
+logging.db.username=${admin.db.username}
+logging.db.password=${admin.db.password}
+logging.db.maxconnections=${admin.db.maxconnections}
+logging.db.enablessl=${admin.db.enablessl}
+logging.db.keystorepassword=${admin.db.keystorepassword}
+logging.db.keystoretype=${admin.db.keystoretype}
+logging.db.keystorelocation=${admin.db.keystorelocation}
+
+# Administrator Server Configuration: Payload Service Database Configuration
+payload.db.url=${admin.db.url}
+payload.db.driver=${admin.db.driver}
+payload.db.dialect=${admin.db.dialect}
+payload.db.username=${admin.db.username}
+payload.db.password=${admin.db.password}
+payload.db.maxconnections=${admin.db.maxconnections}
+payload.db.enablessl=${admin.db.enablessl}
+payload.db.keystorepassword=${admin.db.keystorepassword}
+payload.db.keystoretype=${admin.db.keystoretype}
+payload.db.keystorelocation=${admin.db.keystorelocation}
+
+# Administrator Server Configuration:Provision Drivers
+provisiondrivers.enable=true
+provisiondrivers.provisionMode=resolve
+provisiondriver1.id=com.tibco.tpcl.gen.oracle.jdbc.feature
+provisiondriver1.version=11.2.100.001
+
+# Summary: Products to deploy on the Dev Node
+dev.node.products=
+admin.tibcohost.nodejvmargs=-Xmx1024m -Xms128m -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError
+# General Wizard Configuration
+bpm.installsetup.devserver=false
+bpm.installsetup.standard=true
+bpm.devserver.deployed=true
+bpm.devserver.remove=false
+
+# ActiveMatrix BPM: Database Administrator
+bpm.db.create.schema=true
+bpm.db.type=oracle
+bpm.db.feature.name=com.tibco.tpcl.gen.oracle.jdbc.feature
+bpm.db.feature.version=11.2.100.001
+bpm.db.driver=oracle.jdbc.OracleDriver
+bpm.db.xa.driver=oracle.jdbc.xa.client.OracleXADataSource
+bpm.db.dialect=com.tibco.amf.sharedresource.runtime.core.hibernate.dialects.Oracle10gDialect
+bpm.db.admin.url=jdbc:oracle:thin:@localhost.localdomain:1521:ORCL
+bpm.db.admin.username={{ bpm_db_user }}
+bpm.db.admin.password=#!kPuAEr0M8IMhYsRsM0uJDt8R8G73V+z6
+bpm.db.tablespace=bpm_tablespace
+
+# ActiveMatrix BPM: Runtime Database Configuration
+bpm.db.url=jdbc:oracle:thin:@localhost.localdomain:1521:ORCL
+bpm.db.username=bpmuser
+bpm.db.password=#!zxOoFboLRwUIs8zjXdSXm85n20K3dLXK
+bpm.db.dbname=ORCL
+bpm.db.port=1521
+bpm.db.servername=localhost.localdomain
+
+# ActiveMatrix BPM: BDS Database Configuration
+bpm.bds.owndatabase=false
+bpm.bds.dialect=com.tibco.bds.dialects.BDSOracleDialect
+bpm.bds.url=jdbc:oracle:thin:@localhost.localdomain:1521:ORCL
+bpm.bds.username=bpmuser
+bpm.bds.password=#!zxOoFboLRwUIs8zjXdSXm85n20K3dLXK
+bpm.bds.dbname=ORCL
+bpm.bds.xadriver=oracle.jdbc.xa.client.OracleXADataSource
+bpm.bds.port=1521
+bpm.bds.servername=localhost.localdomain
+bpm.bds.tablespace=bpm_tablespace
+
+
+# ActiveMatrix BPM: Configuration
+bpm.app.name=amx.bpm.app
+bpm.http.host=localhost
+bpm.http.port=8080
+bpm.soap.version=1.1
+bpm.http.secure=false
+bpm.smtp.host=localhost
+bpm.smtp.port=25
+bpm.config.home.root.override=false
+bpm.config.home.root=/home/vagrant/TIBCO_HOME/amx-bpm/tibco/data/bpm
+
+bpm.client.enablessl=false
+bpm.client.autogeneratekeystore=true
+bpm.client.keystorelocation=
+bpm.client.keystoretype=JKS
+bpm.client.keystorepassword=#!VySaXxSTwNvhdUphxC0Rgg==
+bpm.client.keyalias=
+bpm.client.keypassword=#!c7uQ5KhXE0Ei4BYr573Ksw==
+
+# ActiveMatrix BPM: Sizing Details
+
+bpm.sizing.install.size=prod
+    
+bpm.sizing.database.connection.pool.size=50
+bpm.sizing.database.stmt.cache.size=100
+bpm.sizing.pvm.threads=18
+bpm.sizing.jvm.maxpermsize=1024
+bpm.sizing.jvm.xms=1024
+bpm.sizing.jvm.xmx=4096
+
+# Only set if this is a cloud installation
+bpm.cloud.install=false
+bpm.cloud.form.use.http.request.context.url=true
+
+
+# AMX BPM Other Settings
+bpm.enable.osgi.console=false
+bpm.enable.java.debug=false
+
+# AMX BPM JMS settings
+bpm.userapp.jms.useinternal=true
+bpm.userapp.jndi.jms.initial.context=com.tibco.tibjms.naming.TibjmsInitialContextFactory
+bpm.userapp.jms.request=queue.sample
+bpm.userapp.jndi.jms.url=tcp://localhost.localdomain:7222
+bpm.userapp.jms.connection.factory=GenericConnectionFactory
+bpm.userapp.jms.username={{ ems_bpm_user }}
+bpm.userapp.jms.password=
+bpm.userapp.jms.enablessl=false
+
+# Specifies the tibco-admin name if a different in-built admin is required
+bpm.ldap.displayname=tibco-admin
+
+# ActiveMatrix BPM: LDAP Configuration
+bpm.ldap.useinternal=true
+bpm.ldap.password=#!eoboPqJ/k6c+/DoR1TP7KkmXi77UOW9x
+bpm.ldap.internal.port=10801
+bpm.ldap.useinternal.test=false
+	
+
+# ActiveMatrix BPM: CMIS Configuration
+bpm.cmis.enabled=false
+bpm.cmis.useinternal=false
+bpm.cmis.bindingtype=atompub
+bpm.cmis.repositoryid=-default-
+bpm.cmis.amxbpmfolderid=/Sites/amxbpm/documentLibrary
+bpm.cmis.ecm.keystorepassword=#!5fhO1pTwPe3IahQymttkp0+qVffu2P66WpQuarTne1Q=
+bpm.cmis.ecm.keypassword=#!KfyzDGdXlLsh4iX/fB4RcNGBjMfzU+0sMtZYNnDqCNc=
+bpm.cmis.url=http://localhost:9090/alfresco/api/-default-/public/cmis/versions/1.0/atom
+bpm.cmis.adminuser=Admin
+bpm.cmis.adminpassword=#!FWB5xlGTlB5OTm1MZmWN+u0ZJmfsjQcu
+	
+# BPM Auth setting
+bpm.auth.authselection=LdapAsp
+bpm.auth.authtype=LdapAsp
+bpm.auth.allowUsername=false
+
+
+# ActiveMatrix BPM: Administrator Server Configuration
+bpm.adminserver.bindadmin=false
+
+bpm.host=SystemHost
+
+# AMX EMS server details
+bpm.ems.server.username={{ ems_bpm_user }}
+bpm.ems.server.userpassword=#!/fIv13yVNeOBkB8+L5FJyLO5JlUA0QHm

@@ -1,0 +1,5 @@
+#! /bin/bash
+#  script used by oracle.service
+
+{{ oracle_home }}/bin/lsnrctl start
+{{ oracle_home }}/bin/dbstart {{ oracle_home }}

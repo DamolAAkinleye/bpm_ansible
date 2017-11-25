@@ -1,0 +1,32 @@
+---
+- name: Download Ant
+  get_url:
+    url: http://www.us.apache.org/dist/ant/binaries/apache-ant-1.10.1-bin.tar.gz
+    dest: /tmp/apache-ant-1.10.1-bin.tar.gz
+
+- name: Unzip Ant
+  unarchive:
+    src: /tmp/apache-ant-1.10.1-bin.tar.gz
+    dest: /opt/
+
+- name: Create symbolic link for Ant
+  file:
+    src: /opt/apache-ant-1.10.1
+    dest: /opt/ant
+    state: link
+
+- name: Set up ANT_HOME
+  lineinfile:
+    path: /etc/environment
+    line: 'ANT_HOME=/opt/ant'
+
+- name: Create symbolic link for Ant executable
+  file:
+    src: /opt/ant/bin/ant
+    dest: /usr/bin/ant
+    state: link
+
+- name: Remove downloaded Ant package
+  file:
+    path: /tmp/apache-ant-1.10.1-bin.tar.gz
+    state: absent

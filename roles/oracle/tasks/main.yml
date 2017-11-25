@@ -1,0 +1,187 @@
+---
+- name: Install required libraries
+  yum: 
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages_list }}"
+
+- name: Disable SELinux
+  selinux: 
+    state: disabled
+
+- name: Disable Firewall Deamon (firewalld)
+  service: 
+    name: firewalld 
+    state: stopped 
+    enabled: no
+
+- name: Change kernel parameters
+  sysctl: 
+    name: "{{ item.key }}" 
+    value: "{{ item.value }}" 
+    state: present
+  with_dict: "{{ kernel_params }}"
+
+- name: Create oracle install groups
+  group: 
+    name: "{{ oracle_install_group }}" 
+    state: present
+
+- name: Create extra oracle groups
+  group: 
+    name: "{{ item }}" 
+    state: present
+  with_items: "{{ extra_groups }}"
+
+- name: Create user
+  user: 
+    name: "{{ oracle_user }}" 
+    group: "{{ oracle_install_group }}"
+
+- name: Set oracle user password
+  shell: "echo {{ oracle_user }}:{{ oracle_os_user_pass }} | chpasswd"
+
+- name: Add oracle user to extra groups
+  user: 
+    name: "{{ oracle_user }}"
+    groups: "{{ item }}"
+    append: yes
+  with_items: "{{ extra_groups }}"
+
+- name: Add oracle user limits
+  lineinfile: 
+    dest: /etc/security/limits.conf 
+    line: "{{ oracle_user }} {{ item.limit }} {{ item.type}} {{ item.value }}"
+  with_items:
+    - { limit: 'soft', type: nofile, value: '{{ soft_no_file }}' }
+    - { limit: 'hard', type: nofile, value: '{{ hard_no_file }}' }
+    - { limit: 'soft', type: nproc, value: '{{ soft_nproc }}' }
+    - { limit: 'hard', type: nproc, value: '{{ hard_nproc }}' }
+    - { limit: 'soft', type: stack, value: '{{ soft_stack }}' }
+    - { limit: 'hard', type: stack, value: '{{ hard_stack }}' }
+    - { limit: 'soft', type: memlock, value: '{{ soft_memlock }}' }
+    - { limit: 'hard', type: memlock, value: '{{ hard_memlock }}' }
+
+- name: Create Oracle Base directory
+  file: 
+    state: directory 
+    path: "{{ oracle_base }}"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_install_group }}"
+
+- name: Copy script
+  copy: 
+    src: disable_trans_hugepages.sh 
+    dest: "~/disable_trans_hugepages.sh" 
+    mode: 755
+
+- name: Disable Transparent Huge Pages
+  shell: "~/disable_trans_hugepages.sh"
+
+- name: configure kernel for hugepages
+  sysctl: 
+    name: "vm.nr_hugepages" 
+    value: "{{ hugepages_nr }}" 
+    state: present
+  tags:
+    - hugepages
+
+- name: Create folder for installation files
+  file: 
+    state: directory 
+    path: "{{ installation_folder }}"
+
+- name: Copy installer files
+  copy: 
+    src: "{{ vagrant_oracle_folder }}/{{ item }}" 
+    dest: "{{ installation_folder }}/"
+  with_items: "{{ installer_archives }}"
+
+- name: Extract installation files
+  unarchive:
+    src: "{{ installation_folder }}/{{ item }}"
+    dest: "{{ installation_folder }}"
+  with_items: "{{ installer_archives }}"
+
+- name: Gerenerate the response file for software only installation
+  template: 
+    src: db_install.rsp.j2 
+    dest: "{{ installation_folder }}/db_install.rsp"
+
+- name: Install Oracle 
+  command: "{{ installation_folder}}/database/runInstaller -silent -ignorePrereq -ignoreSysPrereqs -waitforcompletion -responseFile {{ installation_folder }}/db_install.rsp"
+  become_user: "{{ oracle_user }}"
+
+- name: Execute Inventoty root command
+  command: "{{ inventory_location }}/orainstRoot.sh"
+  #sudo_user: root
+
+- name: Execute DB home rfoot command
+  command: "{{ oracle_home }}/root.sh"
+  #sudo_user: root
+
+- name: copy listener response file
+  template: 
+    src: netca.rsp.j2 
+    dest: "{{ installation_folder }}/netca.rsp"
+
+- name: Create listener using netca
+  command: "{{ oracle_home }}/bin/netca -silent -responseFile {{ installation_folder }}/netca.rsp"
+  become_user: "{{ oracle_user }}"
+
+- name: Copy response file for dbca
+  template: 
+    src: dbca.rsp.j2 
+    dest: "{{ installation_folder }}/dbca.rsp"
+
+- name: Create database
+  command: "{{ oracle_home }}/bin/dbca -silent -responseFile {{ installation_folder }}/dbca.rsp"
+  become_user: "{{ oracle_user }}"
+
+- name: create oracle home variable
+  lineinfile: 
+    dest: "/home/{{ oracle_user }}/.bashrc"
+    line: "export ORACLE_HOME={{ oracle_home }}"
+
+- name: Create oracle sid variable
+  lineinfile: 
+    dest: "/home/{{ oracle_user }}/.bashrc" 
+    line: "export ORACLE_SID={{ oracle_sid }}"
+
+- name: Add oracle home bin folder
+  lineinfile: 
+    dest: "/home/{{ oracle_user }}/.bashrc" 
+    line: "export PATH=$PATH:$ORACLE_HOME/bin"
+
+- name: Change oratab
+  lineinfile: 
+    dest: "/etc/oratab"
+    regexp: "^{{ oracle_sid }}:{{ oracle_home }}:N" 
+    line: "{{ oracle_sid }}:{{ oracle_home }}:Y"
+  #sudo_user: root
+
+- name: Copy Oracle service script
+  template:
+    src: oracle.service.j2
+    dest: /etc/systemd/system/oracle.service
+    mode: 0750
+
+- name: Copy Oracle startup script
+  template:
+    src: oracle.sh.j2
+    dest: "{{ oracle_startup_script }}"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_install_group }}"
+    mode: 0750
+
+- name: Enable oracle service
+  systemd:
+    name: oracle
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: Remove temp scripts
+  file:
+    path: "~/disable_trans_hugepages.sh"
+    state: absent

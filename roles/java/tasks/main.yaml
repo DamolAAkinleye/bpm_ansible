@@ -1,0 +1,26 @@
+---
+- name: Download jdk1.8
+  get_url:
+    url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/{{ jdk }}.rpm
+    headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
+    dest: /tmp/{{ jdk }}.rpm
+
+- name: Install jdk1.8
+  yum:
+    name: /tmp/{{ jdk }}.rpm
+    state: present
+
+- name: Install IUS
+  yum:
+    name: "https://centos7.iuscommunity.org/ius-release.rpm"
+    state: present
+
+- name: Copy java startup script
+  template:
+    src: java.sh.j2
+    dest: /etc/profile.d/java.sh
+
+- name: Removd downloaded jdk file
+  file:
+    path: /tmp/{{ jdk }}.rpm
+    state: absent

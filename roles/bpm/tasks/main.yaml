@@ -1,0 +1,30 @@
+---
+- name: Create folder for installation files
+  file: 
+    state: directory 
+    path: "{{ installation_folder }}"
+
+- name: Copy installer files
+  copy: 
+    src: "{{ source_folder }}/{{ item }}" 
+    dest: "{{ installation_folder }}/"
+  with_items: "{{ installer_archives }}"
+
+- name: Extract installation files
+  unarchive:
+    src: "{{ installation_folder }}/{{ item }}"
+    dest: "{{ installation_folder }}"
+  with_items: "{{ installer_archives }}"
+
+- name: Gerenerate the response file
+  template: 
+    src: bpm_install.silent.j2 
+    dest: "{{ installation_folder }}/bpm_install.silent"
+
+- name: Install BPM 
+  command: "{{ installation_folder}}/TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ installation_folder }}/bpm_install.silent"
+
+- name: Delete installation folder
+  file: 
+    path: "{{ installation_folder }}"
+    state: absent

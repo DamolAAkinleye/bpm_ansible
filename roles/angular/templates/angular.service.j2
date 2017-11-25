@@ -1,0 +1,13 @@
+[Unit]
+Description=Angular Development Lite-Server
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=vagrant
+ExecStart=/bin/angular.sh
+User=vagrant
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Tibco ActiveMatrix BPM 4.1 server
+After=syslog.target network.target tibco_ems.service oracle.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bpm.sh
+ExecStop=/bin/bpm_stop.sh
+User=vagrant
+
+[Install]
+WantedBy=multi-user.target

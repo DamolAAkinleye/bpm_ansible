@@ -1,0 +1,82 @@
+---
+- name: Create folder for installation files
+  file: 
+    state: directory 
+    path: "{{ installation_folder }}"
+
+- name: Copy script to create BPM users in Oracle
+  copy: 
+    src: create_users_in_oracle.sh 
+    dest: "/tmp/create_users_in_oracle.sh" 
+    mode: 0755
+  become: yes
+
+- name: Create users in Oracle
+  shell: "/tmp/create_users_in_oracle.sh"
+  become: yes
+
+- name: Remove user creation scrpt
+  file: 
+    path: "/tmp/create_users_in_oracle.sh"
+    state: absent
+  become: yes
+
+- name: Copy EMS setup script
+  template:
+    src: bpm_setup.scr.j2
+    dest: "{{ installation_folder }}/bpm_setup.scr"
+
+- name: Set up EMS
+  command: "{{ tibco_home }}/{{ ems_folder }}/bin/tibemsadmin64 -server \"tcp://localhost:7222\" -user admin -password \"\" -script {{ installation_folder }}/bpm_setup.scr"
+
+- name: Gerenerate the response file for configuring driver for Oracle
+  template: 
+    src: build_third_party_driver.properties.j2 
+    dest: "{{ installation_folder }}/build_third_party_driver.properties"
+
+- name: Gerenerate the response file for configuring BPM
+  template: 
+    src: build_bpm.properties.j2 
+    dest: "{{ installation_folder }}/build_bpm.properties"
+
+- name: Copy jdbc driver
+  copy: 
+    src: ojdbc6.jar
+    dest: "{{ installation_folder }}/ojdbc6.jar" 
+
+- name: Configure Oracle driver
+  shell: "{{ tibco_home }}/{{ bpm_home }}/bin/tct tpcl {{ installation_folder }}/build_third_party_driver.properties"
+
+- name: Configure BPM
+  shell: "{{ tibco_home }}/{{ bpm_home }}/bin/tct bpm {{ installation_folder }}/build_bpm.properties"
+
+- name: Copy bpm.service script
+  template:
+    src: bpm.service.j2
+    dest: /etc/systemd/system/bpm.service
+    mode: 0644  
+  become: yes
+
+- name: Copy bpm.sh script
+  template:
+    src: bpm.sh.j2
+    dest: /bin/bpm.sh
+    mode: 0750  
+    owner: vagrant
+  become: yes
+
+- name: Copy bpm_stop.sh script
+  template:
+    src: bpm_stop.sh.j2
+    dest: /bin/bpm_stop.sh
+    mode: 0750  
+    owner: vagrant
+  become: yes
+
+- name: Enable bpm service
+  systemd:
+    name: bpm
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes

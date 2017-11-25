@@ -1,0 +1,53 @@
+---
+- name: Create folder for installation files
+  file: 
+    state: directory 
+    path: "{{ installation_folder }}"
+
+- name: Copy installer files
+  copy: 
+    src: "{{ source_folder }}/{{ item }}" 
+    dest: "{{ installation_folder }}/"
+  with_items: "{{ installer_archives }}"
+
+- name: Extract installation files
+  unarchive:
+    src: "{{ installation_folder }}/{{ item }}"
+    dest: "{{ installation_folder }}"
+  with_items: "{{ installer_archives }}"
+
+- name: Gerenerate the response file
+  template: 
+    src: ems_install.silent.j2 
+    dest: "{{ installation_folder }}/ems_install.silent"
+
+- name: Install EMS 
+  command: "{{ installation_folder}}/TIBCOUniversalInstaller-lnx-x86.bin -silent -V responseFile={{ installation_folder }}/ems_install.silent"
+
+- name: Copy EMS service script
+  template:
+    src: ems.service.j2
+    dest: /etc/systemd/system/ems.service
+    mode: 0750
+  become: yes
+
+- name: Copy EMS startup script
+  template:
+    src: ems.sh.j2
+    dest: "{{ ems_startup_script }}"
+    mode: 0750
+  become: yes
+
+- name: Enable EMS service
+  systemd:
+    name: ems
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  become: yes
+
+- name: Delete installation folder
+  file: 
+    path: "{{ installation_folder }}"
+    state: absent
+

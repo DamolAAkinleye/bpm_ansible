@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "$(date) -- Trying to stop tibco host..." >> /tmp/bpm_service.log
+cd /home/vagrant/TIBCO_HOME/amx-bpm/tibco/data/tibcohost/Admin-AMX-BPM-AMX-BPM-Server/host/bin
+./tibcohost stop -wait true >> /tmp/bpm_service.log
+echo "$(date) -- Stopped tibco host..." >> /tmp/bpm_service.log

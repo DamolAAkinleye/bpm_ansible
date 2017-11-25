@@ -1,0 +1,56 @@
+---
+- name: Install Git
+  yum:
+    name: "git"
+    state: present
+  become: yes
+
+- name: Prepare nodejs installation
+  shell: "curl --silent --location https://rpm.nodesource.com/setup_6.x | sudo bash -"
+  become: yes
+
+- name: Install nodejs
+  yum:
+    name: nodejs
+    state: present
+  become: yes
+
+- name: Create angular dev folder
+  file:
+    path: ~/nodejs
+    state: directory
+
+- name: Install angular quickstart
+  git:
+    repo: https://github.com/angular/quickstart.git
+    dest: ~/nodejs/quickstart
+
+- name: Install node modules
+  shell: "cd ~/nodejs/quickstart && npm install"
+
+- name: Install Angular cli
+  shell: "npm install -g @angular/cli"
+  become: yes
+
+- name: Generate Angular service script
+  template:
+    src: angular.service.j2
+    dest: /etc/systemd/system/angular.service
+    mode: 0750
+  become: yes
+
+- name: Generate Angular startup script
+  template:
+    src: angular.sh.j2
+    dest: /bin/angular.sh
+    owner: vagrant
+    mode: 0750
+  become: yes
+
+- name: Start Angular service
+  systemd:
+    name: angular
+    daemon-reload: yes
+    state: started
+    enabled: yes
+  become: yes

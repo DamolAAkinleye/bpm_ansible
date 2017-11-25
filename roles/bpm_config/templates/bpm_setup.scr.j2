@@ -1,0 +1,67 @@
+delete user {{ ems_bpm_user }}
+
+delete queue AMX_SV.>
+
+delete queue com.tibco.amf.admin.deploymentServerQueue.>
+
+delete queue AMX_MGMT.>
+
+delete queue cl_logservice_queue.physical
+
+delete queue cl_payload_queue.physical
+
+delete queue amx.governance.stats
+
+delete queue amx.governance.internal.stats
+
+delete topic EMSGMS.>
+
+delete topic AMX_MGMT.>
+
+create user {{ ems_bpm_user }} "bpm user" password={{ ems_bpm_password }}
+
+create queue AMX_SV.>
+
+grant queue AMX_SV.> user={{ ems_bpm_user }} create, delete, modify, send, receive
+
+create topic EMSGMS.>
+
+grant topic EMSGMS.> user={{ ems_bpm_user }} create, modify, subscribe, publish
+
+grant topic $sys.monitor.connection.* user={{ ems_bpm_user }} subscribe
+
+create queue com.tibco.amf.admin.deploymentServerQueue.>
+
+grant admin user={{ ems_bpm_user }} view-connection, view-server
+
+grant queue com.tibco.amf.admin.deploymentServerQueue.> user={{ ems_bpm_user }} create, delete, send, receive
+
+create topic AMX_MGMT.>
+
+grant topic AMX_MGMT.> user={{ ems_bpm_user }} create, modify, subscribe, publish
+
+create queue AMX_MGMT.>
+
+grant queue AMX_MGMT.> user={{ ems_bpm_user }} create, delete, modify, send, receive
+
+create queue cl_logservice_queue.physical
+
+create queue cl_payload_queue.physical
+
+create queue amx.governance.stats
+
+create queue amx.governance.internal.stats
+
+grant queue cl_logservice_queue.physical user={{ ems_bpm_user }} send, receive
+
+grant queue cl_payload_queue.physical user={{ ems_bpm_user }} send, receive
+
+grant queue amx.governance.stats user={{ ems_bpm_user }} send, receive
+
+grant queue amx.governance.internal.stats user={{ ems_bpm_user }} send, receive
+
+create jndiname cl_logservice_queue queue cl_logservice_queue.physical
+
+create jndiname cl_payload_queue queue cl_payload_queue.physical
+
+commit

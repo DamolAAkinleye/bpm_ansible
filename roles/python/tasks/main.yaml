@@ -1,0 +1,15 @@
+---
+- name: Install the 'Development tools' package group
+  yum:
+    name: "@Development tools"
+    state: present
+
+- name: Install IUS
+  yum:
+    name: "https://centos7.iuscommunity.org/ius-release.rpm"
+    state: present
+
+- name: Install Python3.6
+  yum:
+    name: python36u
+    state: present

@@ -1,0 +1,16 @@
+[Unit]
+Description=Oracle database server
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+User={{ oracle_user }}
+Group={{ oracle_install_group }}
+RemainAfterExit=yes
+ExecStart={{ oracle_startup_script }}
+Environment=ORACLE_HOME={{ oracle_home }}
+Environment=ORACLE_BASE={{ oracle_base }}
+Environment=ORACLE_SID={{ oracle_sid }}
+
+[Install]
+WantedBy=multi-user.target

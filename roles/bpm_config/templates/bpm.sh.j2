@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "$(date) -- Start tibco host" >> /tmp/bpm_service.log
+cd /home/vagrant/TIBCO_HOME/amx-bpm/tibco/data/tibcohost/Admin-AMX-BPM-AMX-BPM-Server/host/bin
+./tibcohost &

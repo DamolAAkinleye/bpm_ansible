@@ -1,0 +1,13 @@
+---
+source_folder: '/vagrant/ems'
+
+installation_folder: '/vagrant/ems_installation'
+
+installer_archives:
+  - 'TIB_ems_8.3.0_linux_x86.zip'
+
+tibco_home: '/home/vagrant/tibco'
+tibco_env_name: 'TIBCO-HOME'
+tibco_config_home: '/home/vagrant/TIBCO_HOME'
+
+ems_startup_script: '/bin/ems.sh'

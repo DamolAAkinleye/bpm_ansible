@@ -1,0 +1,37 @@
+<?xml  version="1.0"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>---Universal Installer Silent Installation Properties---</comment>
+
+<!--accept the license agreement-->
+<entry key="acceptLicense">true</entry>
+
+<!--the root installation directory-->
+<!--if the product does not support multiple instances and TIBCO_HOME has already been set then-->
+<!--this value is ignored and the existing TIBCO_HOME is used as the installation root-->
+<entry key="installationRoot">{{ tibco_home }}/{{ env_name }}</entry>
+
+<!--If using an existing environment then the installationRoot AND environmentName MUST match a pre-existing environment-->
+<!--If creating a new environment then the installationRoot AND environmentName MUST BE UNIQUE and not match a pre-existing environment-->
+<entry key="environmentName">{{ env_name }}</entry>
+
+<!-- The following three lines are required for downloading all LGPL code introduced by AMX platform, such as Hibernate and Eclipse.   You can either let the installer download the LGPL assembly (if you have an internet connection) by setting LGPLAssemblyDownload to true, or you can use a pre-downloaded assembly by setting LGPLAssemblyDownload to false and LGPLAssemblyPath to the <absolute directory path> of the folder that contains the pre-downloaded assembly.
+-->
+<entry key="LGPLAssemblyLicenseAccepted">true</entry>
+<entry key="LGPLAssemblyDownload">true</entry>
+<entry key="LGPLAssemblyPath"></entry>
+
+<!--
+	Installer profile selection.  Specify which of the two installation profiles you want.
+	Valid choices are:
+
+		Primary machine		-	Installs the full primary ActiveMatrix BPM host software on disk, including AMX Administrator and TIBCO Host.
+		Remote machine		-	Installs the remote ActiveMatrix BPM host software, including AMX Administrator, TIBCO Host & TCT Software on the disk.
+-->
+<entry key="useInstallProfile">true</entry>
+<entry key="selectedProfiles">Primary machine</entry>
+
+<!-- configDirectory - location of configuration files if it is not already defined for the TIBCO HOME instance -->
+<entry key="configDirectoryRoot">{{ tibco_config_home }}/{{ env_name }}</entry>
+
+</properties>

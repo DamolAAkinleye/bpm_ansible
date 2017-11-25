@@ -1,0 +1,8 @@
+---
+- name: Download vim_runtime
+  git:
+    repo: 'git://github.com/amix/vimrc.git'
+    dest: ~/.vim_runtime
+
+- name: Setup basic vimrc
+  command: sh ~/.vim_runtime/install_basic_vimrc.sh

@@ -1,0 +1,136 @@
+---
+- name: Import the Elastic PGP key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Copy the elastic repo file
+  copy: 
+    src: "elastic_stack.repo" 
+    dest: "/etc/yum.repos.d/elastic_stack.repo"
+
+- name: Install ElasticSearch
+  yum:
+    name: elasticsearch
+    state: present
+
+- name: Change elasticsearch yml file
+  lineinfile: 
+    dest: "/etc/elasticsearch/elasticsearch.yml"
+    regexp: "#network.host:.*" 
+    line: "network.host: localhost"
+
+- name: Enable elasticsearch service
+  service:
+    name: elasticsearch
+    enabled: yes
+    state: started
+
+- name: Install Kibana
+  yum:
+    name: kibana
+    state: present
+
+- name: Copy Kibana yml template file
+  template: 
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+
+- name: Enable kibana service
+  service:
+    name: kibana
+    enabled: yes
+    state: started
+
+- name: Install Logstash
+  yum:
+    name: logstash
+    state: present
+
+- name: Install Logstash jms input plugin
+  shell: "/usr/share/logstash/bin/logstash-plugin install logstash-input-jms"
+
+- name: Install beats
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ beats }}"
+
+- name: Config beats
+  shell: "chkconfig --add {{ item }}"
+  with_items: "{{ beats }}"
+
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+
+- name: Install httpd-tools
+  yum:
+    name: httpd-tools
+    state: present
+
+- name: Copy nginx conf template file
+  template: 
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+
+- name: Copy elasticsearch.conf to nginx
+  copy:
+    src: elasticsearch.conf
+    dest: /etc/nginx/conf.d/elasticsearch.conf
+
+- name: Copy kibana.conf to nginx
+  copy:
+    src: kibana.conf
+    dest: /etc/nginx/conf.d/kibana.conf
+
+- name: Enable and start nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Copy Oracle JDBC drive to logstash lib
+  copy:
+    src: ojdbc6.jar
+    dest: "{{ logstash_lib_path }}/ojdbc6.jar"
+    owner: "logstash"
+    group: "logstash"
+
+- name: Copy logstash.yml file
+  template: 
+    src: logstash.yml.j2
+    dest: /etc/logstash/logstash.yml
+
+- name: Copy Logstash central config file
+  template: 
+    src: central.conf.j2
+    dest: "{{ logstash_conf_path }}/central.conf"
+
+- name: Copy Logstash bpm config file
+  template: 
+    src: bpm.conf.j2
+    dest: "{{ logstash_conf_path }}/bpm.conf"
+
+- name: Enable and start logstash service
+  systemd: 
+    enabled: yes
+    state: started 
+    name: logstash
+
+- name: Wait for logstash to complete start up
+  wait_for:
+    path: /var/log/logstash/logstash-plain.log
+    search_regex: Successfully started Logstash API endpoint
+
+- name: Copy filebeat.yml file
+  template: 
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+
+- name: Enable and start filebeat service
+  service: 
+    name: filebeat
+    enabled: yes
+    state: started 
