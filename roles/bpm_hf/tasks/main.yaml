@@ -25,11 +25,9 @@
   copy:
     src: "TIBCOUniversalInstaller-lnx-x86-64.bin"
     dest: "{{ installation_folder }}/TIBCOUniversalInstaller-lnx-x86-64.bin"
-  tags: test
 
 - name: Install BPM HF
   command: "{{ installation_folder}}/TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ installation_folder }}/bpm_hf_install.silent"
-  tags: test
 
 - name: Delete installation folder
   file: 

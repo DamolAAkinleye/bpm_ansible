@@ -4,9 +4,9 @@ source_folder: '/vagrant/bpm/4.1'
 installation_folder: '/vagrant/bpm_installation'
 
 installer_archives:
-  - 'TIB_amx-bpm_4.1.0_linux24gl23_x86_64.zip'
+  - 'TIB_rsbt_3.3.0_linux24gl23_x86_64-3-4-2.zip'
 
-tibco_home: '/home/vagrant/tibco'
+tibco_home: '/home/vagrant/tibco/amx-bpm'
 tibco_env_name: 'TIBCO-HOME'
 tibco_config_home: '/home/vagrant/TIBCO_HOME'
 

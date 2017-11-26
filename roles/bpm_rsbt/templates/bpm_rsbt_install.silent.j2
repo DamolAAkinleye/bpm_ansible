@@ -12,10 +12,10 @@
 <entry key="installationRoot">{{ tibco_home }}</entry>
 
 <!--The installationRoot AND environmentName MUST match a pre-existing environment-->
-<entry key="environmentName">{{ tibco_env_name }}</entry>
+<entry key="environmentName">{{ env_name }}</entry>
 
 <!-- configDirectoryRoot - location of configuration files if it is not already defined for the TIBCO HOME instance. Configuration files will be added to configDirectoryRoot/tibco/cfgmgmt -->
-<entry key="configDirectoryRoot">{{ tibco_home }}</entry>
+<entry key="configDirectoryRoot">{{ tibco_config_home }}</entry>
 
 <!--Profiles Selection-->
 <!-- The 'selectedProfiles' value is a comma separated list of profiles to install. If a profile is listed which does not exist, then it is ignored. At least one profile must be listed if useInstallProfile is set to true -->
