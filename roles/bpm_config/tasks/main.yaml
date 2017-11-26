@@ -89,4 +89,3 @@
   file: 
     path: "{{ installation_folder }}"
     state: absent
-  when: false

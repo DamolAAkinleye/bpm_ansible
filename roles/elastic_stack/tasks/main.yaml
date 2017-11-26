@@ -108,30 +108,38 @@
     src: bpm.conf.j2
     dest: "{{ logstash_conf_path }}/bpm.conf"
 
-- name: Enable and start logstash service
-  systemd: 
-    enabled: yes
-    state: started 
-    name: logstash
-
 - name: Wait for logstash to complete start up
   wait_for:
     path: /var/log/logstash/logstash-plain.log
     search_regex: Successfully started Logstash API endpoint
+  when: false
 
 - name: Copy filebeat.yml file
   template: 
     src: filebeat.yml.j2
     dest: /etc/filebeat/filebeat.yml
 
-- name: Enable but don't start filebeat service
-  service: 
-    name: filebeat
-    enabled: yes
-    state: stopped 
-
-- name: Enable but don't start nginx service
+- name: Enable nginx service
   service:
     name: nginx
-    state: stopped
     enabled: yes
+    state: started
+
+- name: Copy elasticstack convenient script
+  copy:
+    src: elasticstack_scripts.tar
+    dest: /home/vagrant
+    owner: vagrant
+
+- name: Extract elasticstack convenient script
+  unarchive:
+    src: /home/vagrant/elasticstack_scripts.tar
+    dest: /home/vagrant
+    mode: 0770
+    owner: vagrant
+    group: vagrant
+
+- name: Remove elasticstack script archive
+  file:
+    path: /home/vagrant/elasticstack_scripts.tar
+    state: absent
