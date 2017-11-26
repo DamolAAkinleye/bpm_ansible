@@ -1,20 +1,28 @@
 ---
+- name: Check if installation files already exists
+  stat:
+    path: "{{ installation_folder }}/bpm_studio_install.silent"
+  register: st
+
 - name: Create folder for installation files
   file: 
     state: directory 
     path: "{{ installation_folder }}"
+  when: not st.stat.exists
 
 - name: Copy installer files
   copy: 
     src: "{{ source_folder }}/{{ item }}" 
     dest: "{{ installation_folder }}/"
   with_items: "{{ installer_archives }}"
+  when: not st.stat.exists
 
 - name: Extract installation files
   unarchive:
     src: "{{ installation_folder }}/{{ item }}"
     dest: "{{ installation_folder }}"
   with_items: "{{ installer_archives }}"
+  when: not st.stat.exists
 
 - name: Gerenerate the response file
   template: 

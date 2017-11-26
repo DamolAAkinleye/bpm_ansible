@@ -20,8 +20,18 @@
   template: 
     src: bpm_rsbt_install.silent.j2 
     dest: "{{ installation_folder }}/bpm_rsbt_install.silent"
+
+- name: Copy TIBCOUniversalInstaller
+  copy:
+    src: "TIBCOUniversalInstaller-lnx-x86-64.bin"
+    dest: "{{ installation_folder }}/TIBCOUniversalInstaller-lnx-x86-64.bin"
   tags: test
 
 - name: Install BPM RSBT
   command: "{{ installation_folder}}/TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ installation_folder }}/bpm_rsbt_install.silent"
   tags: test
+
+- name: Delete installation folder
+  file: 
+    path: "{{ installation_folder }}"
+    state: absent

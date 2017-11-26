@@ -8,7 +8,7 @@ installer_archives:
 
 tibco_home: '/home/vagrant/tibco'
 tibco_env_name: 'TIBCO-HOME'
-tibco_config_home: '/home/vagrant/TIBCO_HOME'
+tibco_config_home: '/home/vagrant/TIBCO_HOME/amx-bpm/tibco/data'
 
 env_name: 'amx-bpm'
 
@@ -16,7 +16,7 @@ ems_bpm_user: 'bpmadm'
 ems_bpm_password: 'bpmadm'
 ems_folder: 'ems/8.3'
 
-bpm_home: 'bpm/4.1'
+bpm_home: 'amx-bpm/bpm/4.1'
 amx_version: '3.3'
 
 bpm_db_user: 'bpmadm'

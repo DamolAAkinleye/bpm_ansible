@@ -1,8 +1,8 @@
 # We only take '/' as path separator
 # The following properties may be modified
-tibco.home={{ tibco_home }}
+tibco.home={{ tibco_home }}/{{ env_name }}
 plugins.home=${tibco.home}/tct/components/shared/1.0.0/plugins
-machine.model.location={{ tibco_home }}/tools/machinemodel/shared/1.0.0/machine.xmi
+machine.model.location={{ tibco_home }}/{{ env_name }}/tools/machinemodel/shared/1.0.0/machine.xmi
 
 # Shell Configuration Details
 source.jar.folders={{ installation_folder }}

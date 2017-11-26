@@ -46,9 +46,13 @@
 
 - name: Configure Oracle driver
   shell: "{{ tibco_home }}/{{ bpm_home }}/bin/tct tpcl {{ installation_folder }}/build_third_party_driver.properties"
+  register: conf_driver_result
+  failed_when: "'FAILED' in conf_driver_result.stdout"
 
 - name: Configure BPM
   shell: "{{ tibco_home }}/{{ bpm_home }}/bin/tct bpm {{ installation_folder }}/build_bpm.properties"
+  register: conf_bpm_result
+  failed_when: "'FAILED' in conf_bpm_result.stdout"
 
 - name: Copy bpm.service script
   template:
@@ -80,3 +84,9 @@
     enabled: yes
     daemon_reload: yes
   become: yes
+
+- name: Delete installation folder
+  file: 
+    path: "{{ installation_folder }}"
+    state: absent
+  when: false

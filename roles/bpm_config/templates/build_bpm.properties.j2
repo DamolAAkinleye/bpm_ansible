@@ -1,7 +1,7 @@
 # We only take '/' as path separator
 # The following properties may be modified
-tibco.home={{ tibco_home }}
-tibco.config.mgmt.home={{ tibco_config_home }}/amx-bpm/tibco/data
+tibco.home={{ tibco_home }}/{{ env_name }}
+tibco.config.mgmt.home={{ tibco_config_home }}
 amx.version={{ amx_version }}
 
 # Administrator Server Configuration: Details
@@ -232,7 +232,7 @@ bpm.http.secure=false
 bpm.smtp.host=localhost
 bpm.smtp.port=25
 bpm.config.home.root.override=false
-bpm.config.home.root=/home/vagrant/TIBCO_HOME/amx-bpm/tibco/data/bpm
+bpm.config.home.root={{ tibco_config_home }}/bpm
 
 bpm.client.enablessl=false
 bpm.client.autogeneratekeystore=true
