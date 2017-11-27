@@ -52,7 +52,8 @@
 - name: Configure BPM
   shell: "{{ tibco_home }}/{{ bpm_home }}/bin/tct bpm {{ installation_folder }}/build_bpm.properties"
   register: conf_bpm_result
-  failed_when: "'FAILED' in conf_bpm_result.stdout"
+  failed_when: "'FAILED' in conf_bpm_result.stdout or conf_bpm_result.stdout == ''"
+  tags: test
 
 - name: Copy bpm.service script
   template:
