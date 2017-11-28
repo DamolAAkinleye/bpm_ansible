@@ -1,0 +1,40 @@
+---
+- name: Create folder for installation files
+  file: 
+    state: directory 
+    path: "{{ installation_folder }}"
+
+- name: Copy installer files
+  copy: 
+    src: "{{ source_folder }}/{{ item }}" 
+    dest: "{{ installation_folder }}/"
+  with_items: "{{ installer_archives }}"
+
+- name: Copy Universal installer
+  copy:
+    src: "{{ source_folder }}/{{ universal_installer }}"
+    dest: "{{ installation_folder }}"
+
+- name: Extract installation files
+  unarchive:
+    src: "{{ installation_folder }}/{{ item }}"
+    dest: "{{ installation_folder }}"
+  with_items: "{{ installer_archives }}"
+
+- name: Gerenerate the response file
+  template: 
+    src: amx_hf_install.silent.j2 
+    dest: "{{ installation_folder }}/{{ silent_file }}"
+
+- name: Copy TIBCOUniversalInstaller
+  copy:
+    src: "TIBCOUniversalInstaller-lnx-x86-64.bin"
+    dest: "{{ installation_folder }}/{{ universal_installer }}"
+
+- name: Install BPM HF
+  command: "{{ installation_folder}}/{{ universal_installer }} -silent -V responseFile={{ installation_folder }}/{{ silent_file }}"
+
+- name: Delete installation folder
+  file: 
+    path: "{{ installation_folder }}"
+    state: absent

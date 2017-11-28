@@ -1,0 +1,17 @@
+---
+source_folder: '/vagrant/bpm/bpm_hotfix/TIB_amx_3.3.0_HF-018'
+
+installation_folder: '/vagrant/amx_hf_installation'
+
+installer_archives:
+  - 'TIB_amx_3.3.0_HF-018.zip'
+
+tibco_home: '/home/vagrant/tibco/amx-bpm'
+tibco_env_name: 'TIBCO-HOME'
+tibco_config_home: '/home/vagrant/TIBCO_HOME'
+
+env_name: 'amx-bpm'
+
+universal_installer: 'TIBCOUniversalInstaller-lnx-x86-64.bin'
+
+silent_file: 'amx_hf_install.silent'
