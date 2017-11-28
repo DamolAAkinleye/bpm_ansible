@@ -31,7 +31,7 @@
     src: "TIBCOUniversalInstaller-lnx-x86-64.bin"
     dest: "{{ installation_folder }}/{{ universal_installer }}"
 
-- name: Install BPM HF
+- name: Install AMX HF
   command: "{{ installation_folder}}/{{ universal_installer }} -silent -V responseFile={{ installation_folder }}/{{ silent_file }}"
 
 - name: Delete installation folder
