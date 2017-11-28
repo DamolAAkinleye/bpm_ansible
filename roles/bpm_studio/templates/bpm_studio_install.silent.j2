@@ -26,12 +26,12 @@
 <entry key="useCustomerProvidedEclipse">false</entry>
 
 <!-- A prerequisite is to install hibernate. This can be done by downloading hibernate or specifying the absolute path to the hibernate location on the system. To download hibernate, please specify downloadHibernate to true. To specify the absolute path of hibernate on the system instead, set downloadHibernate to false and hibernatePath value should be set to <absolute directory path> under which assembly_tibco_com_tibco_tpcl_org_hibernate_feature_3.2.400.001.zip is located.-->
-<entry key="downloadHibernate">true</entry>
-<entry key="hibernatePath"></entry>
+<entry key="downloadHibernate">false</entry>
+<entry key="hibernatePath">{{ source_folder }}</entry>
 
 <entry key="LGPLAssemblyLicenseAccepted">true</entry>
-<entry key="LGPLAssemblyDownload">true</entry>
-<entry key="LGPLAssemblyPath"></entry>
+<entry key="LGPLAssemblyDownload">false</entry>
+<entry key="LGPLAssemblyPath">{{ source_folder }}</entry>
 
 <!--Product Feature Settings
 In order to perform feature based silent installation, set 'useInstallProfile' entry to 'false' and then add product feature entries using the following format:

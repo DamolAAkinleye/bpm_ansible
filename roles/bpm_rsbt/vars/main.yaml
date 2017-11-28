@@ -1,7 +1,7 @@
 ---
 source_folder: '/vagrant/bpm/4.2'
 
-installation_folder: '/vagrant/bpm_installation'
+installation_folder: '/vagrant/bpm_rsbt_installation'
 
 installer_archives:
   - 'TIB_rsbt_3.3.0_linux24gl23_x86_64.zip'

@@ -1,5 +1,5 @@
 ---
-source_folder: '/vagrant/bpm/bpm_hotfix/TIB_amx_3.3.0_HF-018'
+source_folder: '/vagrant/bpm/hotfix/TIB_amx_3.3.0_HF-018'
 
 installation_folder: '/vagrant/amx_hf_installation'
 

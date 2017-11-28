@@ -9,7 +9,7 @@
 <!--the root installation directory-->
 <!--if the product does not support multiple instances and TIBCO_HOME has already been set then-->
 <!--this value is ignored and the existing TIBCO_HOME is used as the installation root-->
-<entry key="installationRoot">{{ tibco_home }}</entry>
+<entry key="installationRoot">{{ tibco_home }}/{{ env_name }}</entry>
 
 <!--The installationRoot AND environmentName MUST match a pre-existing environment-->
 <entry key="environmentName">{{ env_name }}</entry>

@@ -9,21 +9,21 @@
 <!--the root installation directory-->
 <!--if the product does not support multiple instances and TIBCO_HOME has already been set then-->
 <!--this value is ignored and the existing TIBCO_HOME is used as the installation root-->
-<entry key="installationRoot">{{ tibco_home }}</entry>
+<entry key="installationRoot">{{ tibco_home }}/{{ env_name }}</entry>
 
 <!--If using an existing environment then the installationRoot AND environmentName MUST match a pre-existing environment-->
 <!--If creating a new environment then the installationRoot AND environmentName MUST BE UNIQUE and not match a pre-existing environment-->
 <entry key="environmentName">{{ env_name }}</entry>
 
 <!-- A prerequisite is to install Hibernate. This can be done by downloading Hibernate or specifying the absolute path to the Hibernate location on the system. To download Hibernate, please specify downloadHibernate to true. To specify the absolute path of Hibernate on the system instead, set downloadHibernate to false and hibernatePath value should be set to <absolute directory path>/assembly_tibco_com_tibco_tpcl_org_hibernate_feature_3.2.400.001.zip -->
-<entry key="downloadHibernate">true</entry>
-<entry key="hibernatePath"></entry>
+<entry key="downloadHibernate">false</entry>
+<entry key="hibernatePath">{{ source_folder }}</entry>
 
 <!-- The following three lines are required for downloading the Eclipse LGPL code introduced by AMX platform.   You can either let the installer download the LGPL assembly (if you have an internet connection) by setting LGPLAssemblyDownload to true, or you can use a pre-downloaded assembly by setting LGPLAssemblyDownload to false and LGPLAssemblyPath to the <absolute directory path> of the folder that contains the pre-downloaded assembly.
 -->
 <entry key="LGPLAssemblyLicenseAccepted">true</entry>
-<entry key="LGPLAssemblyDownload">true</entry>
-<entry key="LGPLAssemblyPath"></entry>
+<entry key="LGPLAssemblyDownload">false</entry>
+<entry key="LGPLAssemblyPath">{{ source_folder }}</entry>
 
 <!--
 	Installer profile selection.  Specify which of the two installation profiles you want.
