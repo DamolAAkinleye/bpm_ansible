@@ -6,7 +6,7 @@ installation_folder: '/vagrant/bpm_rsbt_installation'
 installer_archives:
   - 'TIB_rsbt_3.3.0_linux24gl23_x86_64.zip'
 
-tibco_home: '/home/vagrant/tibco/amx-bpm'
+tibco_home: '/home/vagrant/tibco'
 tibco_env_name: 'TIBCO-HOME'
 tibco_config_home: '/home/vagrant/TIBCO_HOME'
 

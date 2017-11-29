@@ -6,7 +6,7 @@ installation_folder: '/vagrant/bpm_hf_installation'
 installer_archives:
   - 'TIB_amx-bpm_4.1.0_HF-005.zip'
 
-tibco_home: '/home/vagrant/tibco/amx-bpm'
+tibco_home: '/home/vagrant/tibco'
 tibco_env_name: 'TIBCO-HOME'
 tibco_config_home: '/home/vagrant/TIBCO_HOME'
 
