@@ -18,5 +18,7 @@
     - { role: bpm_studio, when: false }
     - { role: amx_hf, when: false }
     - { role: bpm_hf, when: false }
-    - { role: bpm_rsbt, when: true }
-    - { role: bpm_config, when: true }
+    - { role: bpm_rsbt, when: false }
+    - { role: bpm_config, when: false }
+    - { role: cleanup, become: yes, when: false }
+    - { role: package, become: yes, when: true }

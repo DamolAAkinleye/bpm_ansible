@@ -1,0 +1,13 @@
+---
+- name: Backup current authorized_keys
+  copy:
+    src: /home/vagrant/.ssh/authorized_keys
+    dest: /home/vagrant/.ssh/authorized_keys.bak 
+
+- name: Use insecure public key to replace the authorized_keys
+  copy:
+    src: vagrant.pub
+    dest: /home/vagrant/.ssh/authorized_keys
+    mode: 0600
+    owner: vagrant
+    group: vagrant
