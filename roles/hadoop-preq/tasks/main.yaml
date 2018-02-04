@@ -1,0 +1,128 @@
+---
+- name: Create temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: directory
+
+- name: Install gcc
+  yum:
+    name: gcc
+    state: latest
+
+- name: Install gcc-c++
+  yum:
+    name: gcc-c++
+    state: latest
+
+- name: Install openssl-devel
+  yum:
+    name: openssl-devel
+    state: latest
+
+- name: Install make
+  yum:
+    name: make
+    state: latest
+
+- name: Install cmake
+  yum:
+    name: cmake
+    state: latest
+
+- name: Download maven package
+  get_url:
+    url: http://mirrors.gigenet.com/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack maven package
+  unarchive:
+    src: "{{ tmp_dir }}/apache-maven-3.3.9-bin.tar.gz"
+    dest: /opt/
+
+- name: Copy maven startup script
+  template:
+    src: maven.sh.j2
+    dest: /etc/profile.d/maven.sh
+
+- name: Download protobuf package
+  get_url:
+    url: https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack protobuf package
+  unarchive:
+    src: "{{ tmp_dir }}/protobuf-2.5.0.tar.gz"
+    dest: /opt/
+
+- name: Configure protobuf
+  shell: "./configure"
+  args:
+    chdir: "/opt/protobuf-2.5.0"
+
+- name: Compile protobuf
+  shell: "make"
+  args:
+    chdir: "/opt/protobuf-2.5.0"
+
+- name: Install protobuf
+  shell: "make install"
+  args:
+    chdir: "/opt/protobuf-2.5.0"
+
+- name: Download Hadoop source code package
+  get_url:
+    url: http://apache.mirror.colo-serv.net/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}-src.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack Hadoop package
+  unarchive:
+    src: "{{ tmp_dir }}/hadoop-{{ hadoop_version }}-src.tar.gz"
+    dest: /opt/
+
+- name: Create Hadoop user group
+  group:
+    name: hadoop
+    state: present
+
+- name: Add vagrant to hadoop group
+  user:
+    name: vagrant
+    groups: hadoop
+    append: yes
+
+- name: Change Hadoop source folder group and ownership
+  file:
+    path: "/opt/hadoop-{{ hadoop_version }}-src"
+    owner: vagrant
+    group: hadoop
+    recurse: yes
+
+- name: Compile Hadoop
+  shell: "mvn package -Pdist,native -DskipTests -Dtar"
+  args:
+    chdir: "/opt/hadoop-{{ hadoop_version }}-src"
+  become: "vagrant"
+
+- name: Copy bigtop.repo
+  template:
+    src: bigtop.repo.j2
+    dest: /etc/yum.repos.d/bigtop.repo
+  tags: test
+
+- name: Sync repo
+  shell: "reposync -r bigtop"
+  args:
+    chdir: "{{ tmp_dir }}"
+  tags: test
+
+- name: Set up host name
+  lineinfile:
+    path: /etc/sysconfig/network
+    line: 'HOSTNAME=master1.cyrus.com'
+  tags: test
+
+- name: Add host name to hosts
+  lineinfile:
+    path: /etc/hosts
+    line: '127.0.0.1 master1.cyrus.com'
+  tags: test
