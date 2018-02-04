@@ -1,0 +1,156 @@
+---
+- name: Create hadoop cluster folder
+  file:
+    name: "{{ hadoop_cluster_folder }}"
+    state: directory
+    group: hadoop
+    owner: vagrant
+  become: yes
+
+- name: Unpack hadoop package
+  unarchive:
+    src: "/opt/hadoop-{{ hadoop_version }}-src/hadoop-dist/target/hadoop-{{ hadoop_version }}.tar.gz"
+    dest: "{{ hadoop_cluster_folder }}"
+
+- name: Create symbolic link
+  file:
+    src: "{{ hadoop_cluster_folder }}/hadoop-{{ hadoop_version }}"
+    dest: "{{ hadoop_cluster_folder }}/hadoop"
+    state: link
+
+- name: Copy hadoop startup script
+  template:
+    src: hadoopenv.sh.j2
+    dest: /etc/profile.d/hadoopenv.sh
+  become: yes
+
+- name: Configure hadoop core-site.xml
+  template:
+    src: core-site.xml.j2
+    dest: "{{ hadoop_cluster_folder }}/hadoop/etc/hadoop/core-site.xml"
+
+- name: Configure hadoop hdfs-site.xml
+  template:
+    src: hdfs-site.xml.j2
+    dest: "{{ hadoop_cluster_folder }}/hadoop/etc/hadoop/hdfs-site.xml"
+
+- name: Create hadoop data folder
+  file:
+    name: "{{ hadoop_data_folder }}"
+    state: directory
+    group: hadoop
+    owner: vagrant
+  become: yes
+
+- name: Format namenode
+  shell: "hdfs namenode -format"
+
+- name: Configure mapred-site.xml
+  template:
+    src: mapred-site.xml.j2
+    dest: "{{ hadoop_cluster_folder }}/hadoop/etc/hadoop/mapred-site.xml"
+
+- name: Configure yarn-site.xml
+  template:
+    src: yarn-site.xml.j2
+    dest: "{{ hadoop_cluster_folder }}/hadoop/etc/hadoop/yarn-site.xml"
+
+- name: Copy namenode startup script
+  copy:
+    src: start_namenode.sh
+    dest: /bin
+    mode: 0750
+    owner: vagrant
+    group: hadoop
+  become: yes
+
+- name: Copy datanode startup script
+  copy:
+    src: start_datanode.sh
+    dest: /bin
+    mode: 0750
+    owner: vagrant
+    group: hadoop
+  become: yes
+
+- name: Copy resourcemanager startup script
+  copy:
+    src: start_resourcemanager.sh
+    dest: /bin
+    mode: 0750
+    owner: vagrant
+    group: hadoop
+  become: yes
+
+- name: Copy nodemanager startup script
+  copy:
+    src: start_nodemanager.sh
+    dest: /bin
+    mode: 0750
+    owner: vagrant
+    group: hadoop
+  become: yes
+
+- name: Copy namenode service script
+  copy:
+    src: namenode.service
+    dest: /etc/systemd/system
+    mode: 0644
+  become: yes
+
+- name: Copy datanode service script
+  copy:
+    src: datanode.service
+    dest: /etc/systemd/system
+    mode: 0644
+  become: yes
+
+- name: Copy resourcemanager service script
+  copy:
+    src: resourcemanager.service
+    dest: /etc/systemd/system
+    mode: 0644
+  become: yes
+
+- name: Copy nodemanager service script
+  copy:
+    src: nodemanager.service
+    dest: /etc/systemd/system
+    mode: 0644
+  become: yes
+
+- name: Enable namenode service
+  systemd:
+    name: namenode
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+  tags: test
+
+- name: Enable datanode service
+  systemd:
+    name: datanode
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+  tags: test
+
+- name: Enable resourcemanager service
+  systemd:
+    name: resourcemanager
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+  tags: test
+
+- name: Enable nodemanager service
+  systemd:
+    name: nodemanager
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: yes
+  tags: test

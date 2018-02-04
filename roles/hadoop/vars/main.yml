@@ -1,0 +1,4 @@
+tmp_dir: /tmp/hadoop
+hadoop_version: 2.7.5
+hadoop_cluster_folder: /opt/cluster
+hadoop_data_folder: /data

@@ -1,0 +1,12 @@
+[Unit]
+Description=Hadoop namenode daemon
+After=syslog.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/start_namenode.sh
+User=vagrant
+
+[Install]
+WantedBy=multi-user.target
