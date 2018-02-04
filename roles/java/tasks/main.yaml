@@ -1,8 +1,7 @@
 ---
-- name: Download jdk1.8
-  get_url:
-    url: http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/{{ jdk }}.rpm
-    headers: 'Cookie:oraclelicense=accept-securebackup-cookie'
+- name: Copy jdk1.8 installation file
+  copy:
+    src: "{{ jdk }}.rpm"
     dest: /tmp/{{ jdk }}.rpm
 
 - name: Install jdk1.8

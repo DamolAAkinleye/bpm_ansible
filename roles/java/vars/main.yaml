@@ -1,2 +1,3 @@
 ---
-jdk: jdk-8u151-linux-x64
+jdk: jdk-8u161-linux-x64
+jdk_version: 161
