@@ -126,7 +126,7 @@
     enabled: yes
     daemon_reload: yes
   become: yes
-  tags: test
+  when: false
 
 - name: Enable datanode service
   systemd:
@@ -135,7 +135,7 @@
     enabled: yes
     daemon_reload: yes
   become: yes
-  tags: test
+  when: false
 
 - name: Enable resourcemanager service
   systemd:
@@ -144,7 +144,7 @@
     enabled: yes
     daemon_reload: yes
   become: yes
-  tags: test
+  when: false
 
 - name: Enable nodemanager service
   systemd:
@@ -153,4 +153,4 @@
     enabled: yes
     daemon_reload: yes
   become: yes
-  tags: test
+  when: false
