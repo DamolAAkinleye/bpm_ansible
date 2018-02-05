@@ -1,0 +1,3 @@
+tmp_dir: /tmp/zookeeper
+zookeeper_version: 3.4.9
+hadoop_cluster_folder: /opt/cluster

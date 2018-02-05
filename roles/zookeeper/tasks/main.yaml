@@ -1,0 +1,53 @@
+---
+- name: Create temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: directory
+
+- name: Download base package
+  get_url:
+    url: https://archive.apache.org/dist/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack zookeeper package
+  unarchive:
+    src: "{{ tmp_dir }}/zookeeper-{{ zookeeper_version }}.tar.gz"
+    dest: "{{ hadoop_cluster_folder }}"
+
+- name: Change Hadoop source folder group and ownership
+  file:
+    path: "{{ hadoop_cluster_folder }}/zookeeper-{{ zookeeper_version }}"
+    owner: vagrant
+    group: hadoop
+    recurse: yes
+  become: yes
+
+- name: Create symbolic link
+  file:
+    src: "{{ hadoop_cluster_folder }}/zookeeper-{{ zookeeper_version }}"
+    dest: "{{ hadoop_cluster_folder }}/zoo"
+    state: link
+
+- name: Copy zookeeper startup script
+  template:
+    src: zookeeper.sh.j2
+    dest: /etc/profile.d/zookeeper.sh
+  become: yes
+
+- name: Copy zoo_sample.cfg as zoo.cfg
+  copy:
+    src: "{{ hadoop_cluster_folder }}/zoo/conf/zoo_sample.cfg"
+    dest: "{{ hadoop_cluster_folder }}/zoo/conf/zoo.cfg"
+
+- name: Update zookeeper config file
+  lineinfile:
+    path: "{{ hadoop_cluster_folder }}/zoo/conf/zoo.cfg"
+    regexp: '^dataDir='
+    line: 'dataDir=/data/zookeeper'
+  tags: test
+
+- name: Remove temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: absent
+  tags: test

@@ -1,0 +1,40 @@
+---
+- name: Create temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: directory
+
+- name: Download hive package
+  get_url:
+    url: https://archive.apache.org/dist/hive/hive-1.2.1/apache-hive-1.2.1-bin.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack hive package
+  unarchive:
+    src: "{{ tmp_dir }}/apache-hive-{{ hive_version }}-bin.tar.gz"
+    dest: "{{ hadoop_cluster_folder }}"
+
+- name: Change Hadoop source folder group and ownership
+  file:
+    path: "{{ hadoop_cluster_folder }}/apache-hive-{{ hive_version }}-bin"
+    owner: vagrant
+    group: hadoop
+    recurse: yes
+  become: yes
+
+- name: Create symbolic link
+  file:
+    src: "{{ hadoop_cluster_folder }}/apache-hive-{{ hive_version }}-bin"
+    dest: "{{ hadoop_cluster_folder }}/hive"
+    state: link
+
+- name: Copy hive startup script
+  template:
+    src: hive.sh.j2
+    dest: /etc/profile.d/hive.sh
+  become: yes
+
+- name: Copy hive-default.xml.template as hive-default.xml
+  copy:
+    src: "{{ hadoop_cluster_folder }}/hive/conf/hive-default.xml.template"
+    dest: "{{ hadoop_cluster_folder }}/hive/conf/hive-default.xml"

@@ -1,0 +1,42 @@
+---
+- name: Create temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: directory
+
+- name: Download base package
+  get_url:
+    url: https://archive.apache.org/dist/hbase/{{ hbase_version }}/hbase-{{ hbase_version }}-bin.tar.gz
+    dest: "{{ tmp_dir }}"
+
+- name: Unpack hbase package
+  unarchive:
+    src: "{{ tmp_dir }}/hbase-{{ hbase_version }}-bin.tar.gz"
+    dest: "{{ hadoop_cluster_folder }}"
+
+- name: Change Hadoop source folder group and ownership
+  file:
+    path: "{{ hadoop_cluster_folder }}/hbase-{{ hbase_version }}"
+    owner: vagrant
+    group: hadoop
+    recurse: yes
+  become: yes
+  tags: test
+
+- name: Create symbolic link
+  file:
+    src: "{{ hadoop_cluster_folder }}/hbase-{{ hbase_version }}"
+    dest: "{{ hadoop_cluster_folder }}/hbase"
+    state: link
+  tags: test
+
+- name: Copy hbase startup script
+  template:
+    src: hbase.sh.j2
+    dest: /etc/profile.d/hbase.sh
+  become: yes
+
+- name: Remove temp installation dir
+  file:
+    name: "{{ tmp_dir }}"
+    state: absent
